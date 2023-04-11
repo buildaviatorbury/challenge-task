@@ -26,4 +26,6 @@ WORKDIR /var/www/html
 
 # Run composer install as non-root user with --no-scripts flag
 USER nonrootuser
-RUN composer install
+#RUN composer install
+CMD ["composer", "install", "--no-interaction", "--no-scripts"]
+CMD ["php-fpm"]
