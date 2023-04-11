@@ -18,23 +18,12 @@ RUN useradd -ms /bin/bash nonrootuser \
     && mkdir -p /var/www/html \
     && chown -R nonrootuser:nonrootuser /var/www/html
 
+# Copy project files to the container
+COPY . /var/www/html/
+
 # Set the working directory
 WORKDIR /var/www/html
 
-# Copy project files to the container
-COPY . .
-
-# Change ownership of copied files
-RUN chown -R nonrootuser:nonrootuser /var/www/html
-
-# Set a different directory for installing dependencies
-ENV COMPOSER_HOME /tmp/composer
-
 # Run composer install as non-root user with --no-scripts flag
 USER nonrootuser
-RUN composer install --no-interaction --no-scripts
-
-# Copy the installed dependencies to the /var/www/html/vendor folder
-USER root
-RUN cp -r /tmp/composer/vendor /var/www/html/vendor
-RUN chown -R nonrootuser:nonrootuser /var/www/html/vendor
+RUN composer install
